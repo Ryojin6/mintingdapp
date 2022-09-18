@@ -10,6 +10,9 @@ import MintWidget from "./MintWidget";
 import Whitelist from "../lib/Whitelist";
 import { toast } from "react-toastify";
 
+import { MerkleTree } from 'merkletreejs';
+import keccak256 from 'keccak256';
+
 const ContractAbi = require("../../smart-contract/artifacts/contracts/" +
   CollectionConfig.contractName +
   ".sol/" +
@@ -63,6 +66,10 @@ export default class Dapp extends React.Component<Props, State> {
     super(props);
 
     this.state = defaultState;
+    const leafNodes = CollectionConfig.whitelistAddresses.map(addr => keccak256(addr));
+    const merkleTree = new MerkleTree(leafNodes, keccak256, { sortPairs: true });
+    const rootHash = '0x' + merkleTree.getRoot().toString('hex');
+    console.log('current root:', rootHash)
   }
 
   componentDidMount = async () => {

@@ -3,7 +3,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import ReactDOM from 'react-dom';
 import Dapp from './react/Dapp';
-import CollectionConfig from '../../../smart-contract/config/CollectionConfig';
+import CollectionConfig from '../smart-contract/config/CollectionConfig';
 import { ToastContainer } from 'react-toastify';
 
 if (document.title === '') {
@@ -13,11 +13,11 @@ if (document.title === '') {
 document.addEventListener('DOMContentLoaded', async () => {
   ReactDOM.render(<>
     <ToastContainer
-          position='top-left'
-          autoClose={5000}
-          closeOnClick={true}
-          pauseOnHover={true}
-          theme='light' />
+      position='top-left'
+      autoClose={5000}
+      closeOnClick={true}
+      pauseOnHover={true}
+      theme='light' />
   </>, document.getElementById('notifications'));
 
   ReactDOM.render(<>
