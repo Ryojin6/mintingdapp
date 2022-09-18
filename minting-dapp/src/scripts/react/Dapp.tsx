@@ -117,7 +117,7 @@ export default class Dapp extends React.Component<Props, State> {
     try {
       this.setState({ loading: true });
       const transaction = await this.contract.mint(amount, {
-        value: this.state.tokenPrice.mul(amount),
+        value: await this.contract.checkCost(amount),
       });
 
       toast.info(
