@@ -29,7 +29,7 @@ const CollectionConfig: CollectionConfigInterface = {
     cost2: 0.0055,
     maxMintAmountPerTx: 3,
   },
-  contractAddress: "0x67cf9F1D2C2c9aB066Ba2a2A58345867ECcA77B8",
+  contractAddress: "0xE6625Ff0466e1C8B7489Fa2c28F7fFFAa2811e6e",
   marketplaceIdentifier: "TRTROS",
   marketplaceConfig: Marketplaces.openSea,
   whitelistAddresses,

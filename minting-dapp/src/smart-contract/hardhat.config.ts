@@ -49,7 +49,7 @@ task('generate-root-hash', 'Generates and prints out the root hash for the curre
   console.log('The Merkle Tree root hash for the current whitelist is: ' + rootHash);
 });
 
-task('generate-proof', 'Generates and prints out the whitelist proof for the given address (compatible with block explorers such as Etherscan)', async (taskArgs: {address: string}) => {
+task('generate-proof', 'Generates and prints out the whitelist proof for the given address (compatible with block explorers such as Etherscan)', async (taskArgs: { address: string }) => {
   // Check configuration
   if (CollectionConfig.whitelistAddresses.length < 1) {
     throw 'The whitelist is empty, please add some addresses to the configuration.';
@@ -62,9 +62,9 @@ task('generate-proof', 'Generates and prints out the whitelist proof for the giv
 
   console.log('The whitelist proof for the given address is: ' + proof);
 })
-.addPositionalParam('address', 'The public address');
+  .addPositionalParam('address', 'The public address');
 
-task('rename-contract', 'Renames the smart contract replacing all occurrences in source files', async (taskArgs: {newName: string}, hre) => {
+task('rename-contract', 'Renames the smart contract replacing all occurrences in source files', async (taskArgs: { newName: string }, hre) => {
   // Validate new name
   if (!/^([A-Z][A-Za-z0-9]+)$/.test(taskArgs.newName)) {
     throw 'The contract name must be in PascalCase: https://en.wikipedia.org/wiki/Camel_case#Variations_and_synonyms';
@@ -95,7 +95,7 @@ task('rename-contract', 'Renames the smart contract replacing all occurrences in
   // Rebuilding types
   await hre.run('typechain');
 })
-.addPositionalParam('newName', 'The new name');
+  .addPositionalParam('newName', 'The new name');
 
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
@@ -125,12 +125,12 @@ const config: HardhatUserConfig = {
   etherscan: {
     apiKey: {
       // Ethereum
-      rinkeby: process.env.BLOCK_EXPLORER_API_KEY,
-      mainnet: process.env.BLOCK_EXPLORER_API_KEY,
+      rinkeby: process.env.BLOCK_EXPLORER_API_KEY || '',
+      mainnet: process.env.BLOCK_EXPLORER_API_KEY || '',
 
       // Polygon
-      polygon: process.env.BLOCK_EXPLORER_API_KEY,
-      polygonMumbai: process.env.BLOCK_EXPLORER_API_KEY,
+      polygon: process.env.BLOCK_EXPLORER_API_KEY || '',
+      polygonMumbai: process.env.BLOCK_EXPLORER_API_KEY || '',
     },
   },
 };
@@ -158,8 +158,7 @@ export default config;
 /**
  * Replaces all occurrences of a string in the given file. 
  */
-function replaceInFile(file: string, search: string, replace: string): void
-{
+function replaceInFile(file: string, search: string, replace: string): void {
   const fileContent = fs.readFileSync(file, 'utf8').replace(new RegExp(search, 'g'), replace);
 
   fs.writeFileSync(file, fileContent, 'utf8');
