@@ -109,6 +109,10 @@ export default class Dapp extends React.Component<Props, State> {
     await this.initWallet();
   };
 
+  async checkCost(amount: number): Promise<any> {
+    return await this.contract.checkCost(amount)
+  }
+
   async mintTokens(amount: number): Promise<void> {
     try {
       this.setState({ loading: true });
@@ -301,6 +305,7 @@ export default class Dapp extends React.Component<Props, State> {
                     whitelistMintTokens={(mintAmount) =>
                       this.whitelistMintTokens(mintAmount)
                     }
+                    checkCost={async (amount: number) => await this.checkCost(amount)}
                     loading={this.state.loading}
                   />
                 ) : (

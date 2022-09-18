@@ -14,18 +14,22 @@ interface Props {
   isUserInWhitelist: boolean;
   mintTokens(mintAmount: number): Promise<void>;
   whitelistMintTokens(mintAmount: number): Promise<void>;
+  checkCost(amount: number): Promise<any>;
 }
 
 interface State {
   mintAmount: number;
+  totalPrice: string;
 }
 
 const defaultState: State = {
   mintAmount: 3,
+  totalPrice: '0'
 };
 
 const defaultCost: State = {
   mintAmount: 0.0055,
+  totalPrice: '0'
 };
 
 export default class MintWidget extends React.Component<Props, State> {
@@ -43,18 +47,27 @@ export default class MintWidget extends React.Component<Props, State> {
     return this.props.isWhitelistMintEnabled && this.props.isUserInWhitelist;
   }
 
-  private incrementMintAmount(): void {
+  private async incrementMintAmount(): Promise<void> {
+    console.log('price:', await this.props.checkCost(Math.min(
+      this.props.maxMintAmountPerTx,
+      this.state.mintAmount + 1
+    )))
     this.setState({
       mintAmount: Math.min(
         this.props.maxMintAmountPerTx,
         this.state.mintAmount + 1
       ),
+      totalPrice: (await this.props.checkCost(Math.min(
+        this.props.maxMintAmountPerTx,
+        this.state.mintAmount + 1
+      ))).toString()
     });
   }
 
-  private decrementMintAmount(): void {
+  private async decrementMintAmount(): Promise<void> {
     this.setState({
       mintAmount: Math.max(1, this.state.mintAmount - 1),
+      totalPrice: (await this.props.checkCost(Math.max(1, this.state.mintAmount - 1))).toString()
     });
   }
 
@@ -73,11 +86,10 @@ export default class MintWidget extends React.Component<Props, State> {
       <>
         {this.canMint() ? (
           <div
-            className={`mint-widget ${
-              this.props.loading
-                ? "animate-pulse saturate-0 pointer-events-none"
-                : ""
-            }`}
+            className={`mint-widget ${this.props.loading
+              ? "animate-pulse saturate-0 pointer-events-none"
+              : ""
+              }`}
           >
             <div className="preview">
               <img src="/build/images/preview.png" alt="Collection preview" />
@@ -86,7 +98,7 @@ export default class MintWidget extends React.Component<Props, State> {
             <div className="price">
               <strong>Total price:</strong>{" "}
               {utils.formatEther(
-                this.props.tokenPrice.mul(this.state.mintAmount)
+                BigNumber.from(this.state.totalPrice)
               )}{" "}
               {this.props.networkConfig.symbol}
             </div>
